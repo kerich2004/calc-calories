@@ -12,9 +12,13 @@
 <body>
   <header>
     <h1>Calc calories</h1>
+    <label class="toogle">
+
+      <input type="checkbox" class="toogle-checkbox">
+      <span class="toogle-slider"></span>
+    </label>
   </header>
   <main>
-    <input type="checkbox">
 
     <section class="section-form">
       <h3>Today I ate ..</h3>
@@ -29,7 +33,9 @@
         </label>
         <button>Add a meal</button>
       </form>
-      <span class="feedback" hidden>Meal noted</span>
+      <p class="feedback" hidden>Meal noted</p>
+      <p class="error-empty error" hidden>Input is empty</p>
+      <p class="error-menu error" hidden>Only dishes from the menu</p>
     </section>
 
     <section class="section-menu">
@@ -43,7 +49,7 @@
       <ul></ul>
     </section>
 
-    <section class="section-table">
+    <section class="section-table" hidden>
       <table>
         <h3>Table</h3>
         <thead>
@@ -59,6 +65,10 @@
           </tr>
         </tbody>
       </table>
+      <footer>
+        <p>Calories for today: <span class="out-cal">0</span></p>
+        <button class="reset-btn">Reset</button>
+      </footer>
     </section>
   </main>
 </body>
