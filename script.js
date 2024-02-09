@@ -15,34 +15,29 @@ const snacksDict = {
   roles: 500,
 }
 
+const dict = Object.assign({}, drinksDict, dishesDict, snacksDict)
 
+const checkbox = document.querySelector('input')
+const [formSection, menuSection,  tableSection] = document.querySelectorAll('section')
+const [form] = document.forms
+const [nameInput, timeInput, button] = form
+const [feedback, errorMessage, errorMenu] = formSection.querySelectorAll('p')
+const resetBtn = tableSection.querySelector('.reset-btn')
+const table = tableSection.querySelector('table')
+const [tbody] = table.tBodies
+const spanOutCal = document.querySelector('.out-cal')
+const lists = document.querySelectorAll('ul');
 
 let caloriesToday = 0
 
-const dict = Object.assign({}, drinksDict, dishesDict, snacksDict)
-
 renderMenu()
 
-const form = document.querySelector('form')
-const menu = document.querySelector('.section-menu')
-const button = document.querySelector('button')
-const resetBtn = document.querySelector('.reset-btn')
-const records = []
-const feedback = document.querySelector('.feedback')
-const errorMessage = document.querySelector('.error')
-const errorMenu = document.querySelector('.error-menu')
-const table = document.querySelector('table')
-const spanOutCal = document.querySelector('.out-cal')
-const checkbox = document.querySelector('input[type = "checkbox"]')
-
-menu.onclick = handleChoice
+menuSection.onclick = handleChoice
 button.onclick = addMeal
 resetBtn.onclick = clearForm
-checkbox.addEventListener('change', isChecked)
+checkbox.onchange = isChecked
 
 function renderMenu() {
-  const lists = document.querySelectorAll('ul');
-
   [drinksDict, dishesDict, snacksDict].forEach((dict, i) => {
     for (const product in dict) {
       lists[i].innerHTML += `<li>${product}</li>`
@@ -58,83 +53,94 @@ function handleChoice(event) {
 
 function addMeal(event) {
   event.preventDefault()
-  let inputAll = document.querySelectorAll('input')
+
   let isValid = true
 
-  for (let i = 1; i < inputAll.length; i++) {
-    if (!inputAll[i].value) {
+  for (const input of inputs) {
+    if (!input.value) {
       isValid = false
 
-      inputAll[i].style = 'border: 2px solid red'
+      input.classList.add('invalid')
       errorMessage.hidden = false
+
       setTimeout(() => {
-        inputAll[i].style = 'border: 2px solid black'
+        input.classList.remove('invalid')
         errorMessage.hidden = true
         form.reset()
       }, 1000)
     }
   }
   if (dict.hasOwnProperty(form.foodName.value) && isValid) {
-    createRecordObj(form)
+    createRecordObj()
   }
 
-  else if (isValid && !dict.hasOwnProperty(form.foodName.value)) {
-    form.foodName.style = "border: 2px  solid red"
+  else if (isValid && !(form.foodName.value in dict)) {
+    form.foodName.classList.add('invalid')
     errorMenu.hidden = false
+
     setTimeout(() => {
       errorMenu.hidden = true
-      form.foodName.style = "border: 2px  solid black"
+      form.foodName.classList.remove('invalid')
     }, 1000)
   }
 
 }
 
-function renderMeal(records) {
-  const tableRow = document.createElement('tr')
-  const tbody = document.querySelector('tbody')
+// function renderMeal(record) {
+//   const tableRow = document.createElement('tr')
 
-  records.forEach(element => {
-    tableRow.innerHTML = `
-    <td>${element.time}</td>
-    <td>${element.product}</td>
-    <td>${element.cal}</td>
-    `
-  })
-  tbody.append(tableRow)
+//   tableRow.innerHTML = `
+//       <td>${record.time}</td>
+//       <td>${record.product}</td>
+//       <td>${record.cal}</td>
+//       <td><button>&times;</button></td>
+//     `
+//   tbody.append(tableRow)
+// }
+
+function renderMeal(record) {
+  tbody.insertRow().innerHTML = `
+    <td>${record.time}</td>
+    <td>${record.product}</td>
+    <td>${record.cal}</td>
+    <td><button>&times;</button></td>
+  `
 }
 
-function createRecordObj(form) {
-  let record = {
+function createRecordObj() {
+  const record = {
     product: form.foodName.value,
     time: form.foodTime.value,
-    cal: dict[form.foodName.value]
+    cal: dict[form.foodName.value],
   }
 
-  records.push(record)
   caloriesToday += record.cal
   spanOutCal.innerText = caloriesToday
   form.reset()
   feedback.hidden = false
+  renderMeal(record)
+
   setTimeout(() => feedback.hidden = true, 1000)
-  renderMeal(records)
 }
 
 function clearForm() {
-  document.querySelector('tbody').innerHTML = ''
-
+  tbody.innerHTML = ''
   spanOutCal.innerText = '0'
+  caloriesToday = 0
 }
 
 function isChecked() {
-  const sectionTable = document.querySelector('.section-table')
-  const sectionMenu = document.querySelector('.section-menu')
 
   if (checkbox.checked) {
-    sectionMenu.style = 'display: none'
-    sectionTable.style = 'display: flex'
+    menuSection.style = 'display: none'
+    tableSection.style = 'display: flex'
   }
   else {
-    sectionMenu.style = 'display: block'
-    sectionTable.style = 'display: none'
+    menuSection.style = 'display: block'
+    tableSection.style = 'display: none'
   }
+
+  // [sectionMenu.style, sectionTable.style] = checkbox.checked
+  //   ? ['display: none', 'display: flex']
+  //   : ['display: block', 'display: none']
 }

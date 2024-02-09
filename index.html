@@ -6,20 +6,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Calculator calories</title>
   <link rel="stylesheet" href="style.css">
-  <script type="module" src="script.js"></script>
+  <script src="script.js" defer></script>
 </head>
 
 <body>
   <header>
     <h1>Calc calories</h1>
+    
     <label class="toogle">
-
       <input type="checkbox" class="toogle-checkbox">
       <span class="toogle-slider"></span>
     </label>
   </header>
+  
   <main>
-
     <section class="section-form">
       <h3>Today I ate ..</h3>
       <form action="">
@@ -33,6 +33,7 @@
         </label>
         <button>Add a meal</button>
       </form>
+
       <p class="feedback" hidden>Meal noted</p>
       <p class="error-empty error" hidden>Input is empty</p>
       <p class="error-menu error" hidden>Only dishes from the menu</p>
@@ -50,21 +51,20 @@
     </section>
 
     <section class="section-table" hidden>
+      <h3>Table</h3>
+
       <table>
-        <h3>Table</h3>
         <thead>
           <th>Time</th>
           <th>Product</th>
           <th>Calories</th>
+          <th></th>
         </thead>
+
         <tbody>
-          <tr>
-            <td>test</td>
-            <td>test</td>
-            <td>test</td>
-          </tr>
         </tbody>
       </table>
+
       <footer>
         <p>Calories for today: <span class="out-cal">0</span></p>
         <button class="reset-btn">Reset</button>
